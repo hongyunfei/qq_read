@@ -1,5 +1,13 @@
+/*
+汪汪验证码获取
+[task_local]
+#汪汪验证码获取
+58 7,15,23 * * * 
+[Script]
+cron "58 7,15,23 * * * " script-path=jd_task_validate.js,tag=汪汪验证码获取
+*/
 let common = require("./utils/common");
-let $ = new common.env('京东验证码获取'); 
+let $ = new common.env('汪汪验证码获取'); 
 let validator = require("./utils/jdValidate");
 let fs = require("fs"); 
 $.setOptions({
