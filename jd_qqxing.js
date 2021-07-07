@@ -97,7 +97,7 @@ $.shareuuid = "df20c57134084b92b0b87d45de6d1a75"
                     let exchanges =Math.floor($.foodNum/1000)
                     console.log(`可兑换 ${exchanges} 次 20京🐶`)
                     for(q = 0;q<exchanges && Exchange;q++){
-                    await exchange(13)   
+                    await exchange(14)   
                     }
                     await getinfo()
                     if(!Exchange){console.log("你 默认 不兑换东西,请自行进去活动兑换")}
