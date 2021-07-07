@@ -2,6 +2,8 @@
 
 只支持nodejs环境
 14 10 * * *
+[Script]
+cron "1 0 * * * " script-path=jd_sign.js,tag=京东签到图形验证
 */
 
 const validator = require('./JDJRValidator_Pure.js');
