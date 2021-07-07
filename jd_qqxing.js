@@ -7,6 +7,8 @@
 [task_local]
 #星系牧场
 1 0-23/2 * * * 
+[Script]
+cron "1 0-23/2 * * * " script-path=jd_qqxing.js,tag=QQ星系牧场
 */
 const $ = new Env('QQ星系牧场');
 //Node.js用户请在jdCookie.js处填写京东ck;
