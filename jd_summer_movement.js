@@ -4,6 +4,8 @@ https://wbbny.m.jd.com/babelDiy/Zeus/2rtpffK8wqNyPBH6wyUDuBKoAbCt/index.html
 
 cron 12 0,6-23/2 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement.js
 
+解密脚本 跟 任务脚本同一目录 可以手动下载
+
 */
 
 
@@ -44,6 +46,7 @@ $.secretpInfo = {};
 $.ShInviteList = [];
 $.innerShInviteList = [
   '',
+  '',
   ''
 ];
 if ($.isNode()) {
@@ -80,22 +83,22 @@ function randomString(e) {
       '新增活动火爆不做任务处理\n' +
       '活动时间：2021-07-08至2021-08-08\n' +
       '脚本更新时间：2021年7月13日 18点00分\n'
-      );
-      if(`${summer_movement_joinjoinjoinhui}` === "true") console.log('您设置了入会\n')
-      if(`${summer_movement_HelpHelpHelpFlag}` === "true") console.log('您设置了只执行邀请助力\n')
-      if(Number(summer_movement_ShHelpFlag) === 1){
-        console.log('您设置了 【百元守卫战SH】✅ || 互助✅')
-      }else if(Number(summer_movement_ShHelpFlag) === 2){
-        console.log('您设置了 【百元守卫战SH】✅ || 互助❌')
-      }else if(Number(summer_movement_ShHelpFlag) === 0){
-        console.log('您设置了 【百元守卫战SH】❌ || 互助❌')
-      }else{
-        console.log('原 summer_movement_ShHelpFlag 变量不兼容请修改 0不开启也不助力 1开启并助力 2开启但不助力')
-      }
+  );
+  if(`${summer_movement_joinjoinjoinhui}` === "true") console.log('您设置了入会\n')
+  if(`${summer_movement_HelpHelpHelpFlag}` === "true") console.log('您设置了只执行邀请助力\n')
+  if(Number(summer_movement_ShHelpFlag) === 1){
+    console.log('您设置了 【百元守卫战SH】✅ || 互助✅')
+  }else if(Number(summer_movement_ShHelpFlag) === 2){
+    console.log('您设置了 【百元守卫战SH】✅ || 互助❌')
+  }else if(Number(summer_movement_ShHelpFlag) === 0){
+    console.log('您设置了 【百元守卫战SH】❌ || 互助❌')
+  }else{
+    console.log('原 summer_movement_ShHelpFlag 变量不兼容请修改 0不开启也不助力 1开启并助力 2开启但不助力')
+  }
 
-      console.log('\n\n该脚本启用了[正道的光]模式\n执行 做任务、做店铺任务 会有几率不执行\n本脚本不让任务一次全部做完\n您可以多跑几次\n北京时间18时后是正常模式\n\n🐸\n')
+  console.log('\n\n该脚本启用了[正道的光]模式\n执行 做任务、做店铺任务 会有几率不执行\n本脚本不让任务一次全部做完\n您可以多跑几次\n北京时间18时后是正常模式\n\n🐸\n')
 
-      
+
   console.log(`注意：若执行失败，则请手动删除脚本目录下的“app.*.js”文件，然后重新执行脚本`);
   console.log(`类似 app.5c2472d1.js、app.c7364f20.js 等都删除\n不用每次删 执行失败再删`);
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -134,15 +137,15 @@ function randomString(e) {
       await $.wait(2000);
     }
   }
-  
+
 
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 
 async function movement() {
@@ -213,7 +216,7 @@ async function movement() {
         }
       }
     }
-    
+
     console.log(`\n做任务\n`);
     if(!$.hotFlag) await takePostRequest('olympicgames_getTaskDetail');
     if(`${summer_movement_HelpHelpHelpFlag}` === "true") return
@@ -231,6 +234,7 @@ async function movement() {
           }
           $.callbackInfo = {};
           console.log(`做任务：${$.oneActivityInfo.title || $.oneActivityInfo.taskName || $.oneActivityInfo.shopName};等待完成`);
+          await $.wait(3000)
           if ($.oneTask.taskType === 21 && `${summer_movement_joinjoinjoinhui}` === "true"){
             let channel = $.oneActivityInfo.memberUrl.match(/channel=(\d+)/) ? $.oneActivityInfo.memberUrl.match(/channel=(\d+)/)[1] : '';
             const jiarubody = {
@@ -260,7 +264,7 @@ async function movement() {
             }else if(data.data && data.data.bizMsg){
               console.log(data.data.bizMsg);
             }else{
-            console.log(JSON.stringify($.callbackInfo));
+              console.log(JSON.stringify($.callbackInfo));
             }
             await $.wait(getRndInteger(500, 1000));
           } else {
@@ -271,6 +275,7 @@ async function movement() {
         }
       } else if ($.oneTask.taskType === 2 && $.oneTask.status === 1 && $.oneTask.scoreRuleVos[0].scoreRuleType === 2){
         console.log(`做任务：${$.oneTask.taskName};等待完成 (实际不会添加到购物车)`);
+        await $.wait(3000)
         $.taskId = $.oneTask.taskId;
         $.feedDetailInfo = {};
         await takePostRequest('olympicgames_getFeedDetail');
@@ -295,6 +300,7 @@ async function movement() {
           }
           $.callbackInfo = {};
           console.log(`做任务：浏览${$.oneActivityInfo.skuName};等待完成`);
+          await $.wait(3000)
           await takePostRequest('olympicgames_doTaskDetail');
           if ($.oneTask.taskType === 2) {
             await $.wait(getRndInteger(1000, 2000));
@@ -307,7 +313,7 @@ async function movement() {
         }
       }
     }
-    
+
     //==================================微信任务========================================================================
     $.wxTaskList = [];
     if(!$.hotFlag) await takePostRequest('wxTaskDetail');
@@ -322,6 +328,7 @@ async function movement() {
         }
         $.callbackInfo = {};
         console.log(`做任务：${$.oneActivityInfo.title || $.oneActivityInfo.taskName || $.oneActivityInfo.shopName};等待完成`);
+        await $.wait(3000)
         await takePostRequest('olympicgames_doTaskDetail');
         if ($.callbackInfo.code === 0 && $.callbackInfo.data && $.callbackInfo.data.result && $.callbackInfo.data.result.taskToken) {
           await $.wait(getRndInteger(7000, 8000));
@@ -366,6 +373,7 @@ async function movement() {
           }
           $.callbackInfo = {};
           console.log(`做任务：${$.oneActivityInfo.subtitle || $.oneActivityInfo.title || $.oneActivityInfo.taskName || $.oneActivityInfo.shopName};等待完成`);
+          await $.wait(3000)
           await takePostRequest('olympicgames_doTaskDetail');
           if ($.callbackInfo.code === 0 && $.callbackInfo.data && $.callbackInfo.data.result && $.callbackInfo.data.result.taskToken) {
             await $.wait(8000);
@@ -510,7 +518,7 @@ async function dealReturn(type, res) {
   }
   switch (type) {
     case 'olympicgames_home':
-    if (data.code === 0 && data.data && data.data.result) {
+      if (data.code === 0 && data.data && data.data.result) {
         if (data.data['bizCode'] === 0) {
           $.homeData = data.data;
           $.secretpInfo[$.UserName] = true
@@ -849,7 +857,7 @@ function joinjoinjoinhui(url,Referer) {
  * @param count
  * @returns {Buffer}
  */
- function getRandomArrayElements(arr, count) {
+function getRandomArrayElements(arr, count) {
   var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
   while (i-- > min) {
     index = Math.floor((i + 1) * Math.random());
