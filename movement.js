@@ -82,7 +82,7 @@ function randomString(e) {
       '活动时间：2021-07-08至2021-08-08\n' +
       '脚本更新时间：2021年7月13日 18点00分\n'
       );
-      if(`${summer_movement_joinjoinjoinhui}` === "true") console.log('您设置了入会\n')
+      if(`${summer_movement_joinjoinjoinhui}` === "false") console.log('您设置了入会\n')
       if(`${summer_movement_HelpHelpHelpFlag}` === "true") console.log('您设置了只执行邀请助力\n')
       if(Number(summer_movement_ShHelpFlag) === 1){
         console.log('您设置了 【百元守卫战SH】✅ || 互助✅')
@@ -215,29 +215,101 @@ async function movement() {
       }
     }
     
-   
-      if(taskbool) await $.wait(1000);
-      let boxLotteryNum = $.shopResult.boxLotteryNum;
-      for (let j = 0; j < boxLotteryNum; j++) {
-        console.log(`开始第${j+1}次拆盒`)
-        //抽奖
-        await takePostRequest('olympicgames_boxShopLottery');
-        await $.wait(3000);
+    console.log(`\n做任务\n`);
+    if(!$.hotFlag) await takePostRequest('olympicgames_getTaskDetail');
+    if(`${summer_movement_HelpHelpHelpFlag}` === "true") return
+    await $.wait(1000);
+    //做任务
+    for (let i = 0; i < $.taskList.length && !$.hotFlag; i++) {
+      $.oneTask = $.taskList[i];
+      if(!aabbiill()) continue;
+      if ([1, 3, 5, 7, 9, 21, 26].includes($.oneTask.taskType) && $.oneTask.status === 1) {
+        $.activityInfoList = $.oneTask.shoppingActivityVos || $.oneTask.brandMemberVos || $.oneTask.followShopVo || $.oneTask.browseShopVo;
+        for (let j = 0; j < $.activityInfoList.length; j++) {
+          $.oneActivityInfo = $.activityInfoList[j];
+          if ($.oneActivityInfo.status !== 1 || !$.oneActivityInfo.taskToken) {
+            continue;
+          }
+          $.callbackInfo = {};
+          console.log(`做任务：${$.oneActivityInfo.title || $.oneActivityInfo.taskName || $.oneActivityInfo.shopName};等待完成`);
+          if ($.oneTask.taskType === 21 && `${summer_movement_joinjoinjoinhui}` === "true"){
+            let channel = $.oneActivityInfo.memberUrl.match(/channel=(\d+)/) ? $.oneActivityInfo.memberUrl.match(/channel=(\d+)/)[1] : '';
+            const jiarubody = {
+              venderId: $.oneActivityInfo.vendorIds,
+              shopId: $.oneActivityInfo.ext.shopId,
+              bindByVerifyCodeFlag: 1,
+              registerExtend: {},
+              writeChildFlag: 0,
+              channel: channel
+            }
+            let url = `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body=${encodeURIComponent(JSON.stringify(jiarubody))}&client=H5&clientVersion=9.2.0&uuid=88888`
+            await joinjoinjoinhui(url,$.oneActivityInfo.memberUrl)
+            await $.wait(2000);
+          }
+          await takePostRequest('olympicgames_doTaskDetail');
+          if ($.callbackInfo.code === 0 && $.callbackInfo.data && $.callbackInfo.data.result && $.callbackInfo.data.result.taskToken) {
+            await $.wait(getRndInteger(7000, 8000));
+            let sendInfo = encodeURIComponent(`{"dataSource":"newshortAward","method":"getTaskAward","reqParams":"{\\"taskToken\\":\\"${$.callbackInfo.data.result.taskToken}\\"}","sdkVersion":"1.0.0","clientLanguage":"zh"}`)
+            await callbackResult(sendInfo)
+          } else if ($.oneTask.taskType === 5 || $.oneTask.taskType === 3 || $.oneTask.taskType === 26) {
+            await $.wait(getRndInteger(1000, 2000));
+            console.log(`任务完成`);
+          } else if ($.oneTask.taskType === 21) {
+            let data = $.callbackInfo
+            if(data.data && data.data.bizCode === 0){
+              console.log(`获得：${data.data.result.score}`);
+            }else if(data.data && data.data.bizMsg){
+              console.log(data.data.bizMsg);
+            }else{
+            console.log(JSON.stringify($.callbackInfo));
+            }
+            await $.wait(getRndInteger(1000, 2000));
+          } else {
+            console.log($.callbackInfo);
+            console.log(`任务失败`);
+            await $.wait(getRndInteger(2000, 3000));
+          }
+        }
+      } else if ($.oneTask.taskType === 2 && $.oneTask.status === 1 && $.oneTask.scoreRuleVos[0].scoreRuleType === 2){
+        console.log(`做任务：${$.oneTask.taskName};等待完成 (实际不会添加到购物车)`);
+        $.taskId = $.oneTask.taskId;
+        $.feedDetailInfo = {};
+        await takePostRequest('olympicgames_getFeedDetail');
+        let productList = $.feedDetailInfo.productInfoVos;
+        let needTime = Number($.feedDetailInfo.maxTimes) - Number($.feedDetailInfo.times);
+        for (let j = 0; j < productList.length && needTime > 0; j++) {
+          if(productList[j].status !== 1){
+            continue;
+          }
+          $.taskToken = productList[j].taskToken;
+          console.log(`加购：${productList[j].skuName}`);
+          await takePostRequest('add_car');
+          await $.wait(getRndInteger(1000, 2000));
+          needTime --;
+        }
+      }else if ($.oneTask.taskType === 2 && $.oneTask.status === 1 && $.oneTask.scoreRuleVos[0].scoreRuleType === 0){
+        $.activityInfoList = $.oneTask.productInfoVos ;
+        for (let j = 0; j < $.activityInfoList.length; j++) {
+          $.oneActivityInfo = $.activityInfoList[j];
+          if ($.oneActivityInfo.status !== 1 || !$.oneActivityInfo.taskToken) {
+            continue;
+          }
+          $.callbackInfo = {};
+          console.log(`做任务：浏览${$.oneActivityInfo.skuName};等待完成`);
+          await takePostRequest('olympicgames_doTaskDetail');
+          if ($.oneTask.taskType === 2) {
+            await $.wait(getRndInteger(1000, 2000));
+            console.log(`任务完成`);
+          } else {
+            console.log($.callbackInfo);
+            console.log(`任务失败`);
+            await $.wait(getRndInteger(2000, 3000));
+          }
+        }
       }
-      // let wishLotteryNum = $.shopResult.wishLotteryNum;
-      // for (let j = 0; j < wishLotteryNum; j++) {
-      //   console.log(`开始第${j+1}次能量抽奖`)
-      //   //抽奖
-      //   await takePostRequest('zoo_wishShopLottery');
-      //   await $.wait(3000);
-      // }
-      if(taskbool) await $.wait(3000);
     }
-
-  } catch (e) {
-    $.logErr(e)
-  }
-}
+    
+    
 
 async function takePostRequest(type) {
   let body = ``;
