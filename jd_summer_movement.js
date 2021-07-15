@@ -59,9 +59,9 @@ if ($.isNode()) {
 }
 
 $.appid = 'o2_act';
-const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : `jdapp;android;10.0.8;${Math.ceil(Math.random()*2+12)}.${Mat
+const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : `jdpingou;iPhone;10.0.6;${Math.ceil(Math.random()*2+12)}.${Mat
 
-function randomString(e) {h.ceil(Math.random()*4)};${randomString(40)};`) : ($.getdata('JDUA') ? $.getdata('JDUA') : `jdapp;android;10.0.8;${Math.ceil(Math.random()*2+12)}.${Math.ceil(Math.random()*4)};${randomString(40)};`)
+function randomString(e) {h.ceil(Math.random()*4)};${randomString(40)};`) : ($.getdata('JDUA') ? $.getdata('JDUA') : `jdpingou;iPhone;10.0.6;${Math.ceil(Math.random()*2+12)}.${Math.ceil(Math.random()*4)};${randomString(40)};`)
   e = e || 32;
   let t = "abcdefhijkmnprstwxyz2345678", a = t.length, n = "";
   for (i = 0; i < e; i++)
