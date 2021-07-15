@@ -1,3 +1,10 @@
+/*
+[task_local]
+#宠汪汪兑换京豆
+0 0,8,16 * * * 
+[Script]
+cron "0 0,8,16 * * * " script-path=jd_reward_joy.js,tag=宠汪汪兑换京豆
+*/
 let common = require("./utils/common");
 let $ = new common.env('宠汪汪兑换京豆');
 let fs = require("fs"); 
