@@ -144,7 +144,7 @@ async function getActivityInfo(){
 async function getActivityList(){
   return new Promise((resolve) => {
     let options = {
-      "url": `https://sendbeans.jd.com/common/api/bean/activity/get/entry/list/by/channel?channelId=14&channelType=H5&sendType=0&singleActivity=false&invokeKey=NRp8OPxZMFXmGkaE`,
+      "url": `https://sendbeans.jd.com/common/api/bean/activity/get/entry/list/by/channel?channelId=14&channelType=H5&sendType=0&singleActivity=false&invokeKey=qRKHmL4sna8ZOP9F`,
       "headers": {
         "Host": "sendbeans.jd.com",
         "Origin": "https://sendbeans.jd.com",
